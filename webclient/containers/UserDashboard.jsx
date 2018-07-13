@@ -56,6 +56,12 @@ class UserDashboard extends React.Component {
   handleActivationDateChange(event, chosenDate){
     this.setState({activationDate : chosenDate});
   }
+  handleKYCDetails(){
+
+  }
+  handleSubmitPortDetails(){
+
+  }
   getList(items, valueName, textName){
     return items.map((item,id) => {
       return (<MenuItem value={item[valueName]} key={id} primaryText={item[textName]}/>);
@@ -129,6 +135,7 @@ class UserDashboard extends React.Component {
                   backgroundColor = '#1A589E'
                   labelStyle = {{color : 'white'}}
                   zDepth = {4}
+                  onClick = {this.handleKYCDetails.bind(this)}
                 />
                 </td>
               </tr>
@@ -143,6 +150,7 @@ class UserDashboard extends React.Component {
             labelStyle = {{color : 'white'}}
             icon = {<NavigationArrowForward color={'#fff'} />}
             zDepth = {4}
+            onClick = {this.handleSubmitPortDetails.bind(this)}
           />
         </Paper>
         </div>
