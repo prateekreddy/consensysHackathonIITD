@@ -21,6 +21,7 @@ module.exports = {
             }, {
                 test: /\.jsx?$/,
                 loader: 'babel-loader',
+                exclude: /(node_modules|bower_compontents)/,
                 options: {
                     presets: ['es2015', 'react', 'stage-1']
                 }
