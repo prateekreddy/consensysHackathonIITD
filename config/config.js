@@ -1,3 +1,5 @@
+
+
 let serviceCredentials = {
   mongodb : {
     username : '',
@@ -29,9 +31,10 @@ let carrier1 = {
 CARRIERAddress: "0xa5cb82474ee5569e60cdf4ac8022ea60819460db",
 }
 
+
 module.exports = {
   mongoConfig : mongoConfig,
   jwtConfig : jwtConfig,
   blockchainConfig : blockchainConfig,
-  carrier1 : carrier1
+  carrier1 : carrier1,
 }

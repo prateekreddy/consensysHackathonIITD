@@ -10,6 +10,15 @@ import NavigationArrowForward from 'material-ui/svg-icons/navigation/arrow-forwa
 import NavBar from '../components/NavBar.jsx';
 import SectionHeader from '../components/SectionHeader.jsx';
 
+import { Connect, SimpleSigner} from 'uport-connect';
+import ActionTheaters from 'material-ui/svg-icons/navigation/arrow-forward';
+
+const uport = new Connect('Mobile Number Porting', {
+  clientId: '2p29ciAQ1zDPLsATkFVv9XzB3pRJSPRUYH6',
+  network: 'rinkeby',
+  signer: SimpleSigner('52bd25fa30a2544a5d40815b1d8d1cb0725795f3259897e4604915404912f1db')
+})
+
 class UserDashboard extends React.Component {
   constructor(props){
     super(props);
@@ -57,10 +66,20 @@ class UserDashboard extends React.Component {
     this.setState({activationDate : chosenDate});
   }
   handleKYCDetails(){
-
+    const that = this;
+    uport.requestCredentials({
+      requested: ['name', 'passport']
+    }).then((credentials) => {
+      credentials.receive()
+      if(!credentials.passport) {
+        that.setState({errMsg: "Please update your uPort profile with passport credentials"});
+      } else {
+        that.setState({passport: credentials.passport});
+      }
+    });
   }
   handleSubmitPortDetails(){
-
+    
   }
   getList(items, valueName, textName){
     return items.map((item,id) => {
