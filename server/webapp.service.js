@@ -10,8 +10,8 @@ const app = express();
 const mongoose = require('mongoose');
 const configDB = require('../config/config.js').mongoConfig;
 
-const auth = require('./authentication');
-const locationHistory = require('./locationhistory');
+// const auth = require('./authentication');
+const carrier = require('./carrier');
 
 app.set('superSecret', configJwt.secret);
 mongoose.Promise = global.Promise;
@@ -46,7 +46,7 @@ app.get('/', function(req, res) {
     res.sendFile(path.resolve(__dirname, '../', 'webclient', 'assets', 'index.html', 'client'));
 });
 
-app.use('/auth', auth);
+// app.use('/auth', auth);
 app.use(function(req,res,next){
   try {
     if(req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT'){
@@ -60,7 +60,7 @@ app.use(function(req,res,next){
     return res.status(500).send({message : "Internal Server Error.."});
   }
 });
-app.use('/history', locationHistory);
+
 app.use(function(req, res) {
     let err = new Error('Resource not found');
     err.status = 404;

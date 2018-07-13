@@ -4,11 +4,12 @@ const carrierauthenticateOTP = require('./carrier.authenticateOTP');
 const carrierSubmitPortRequest = require('./carrier.submitPortRequest');
 const carrierGetCarrierOnboard = require('./carrier.getCarrierOnboard');
 
-router.post('/submitOTP',(req, res)=>{
+router.post('/submitOTP', (req, res)=>{
    try{
-     await userAuth = carrierauthenticateOTP.authenticateOTP(req);
-          console.log(userAuth);
-          res.send(userAuth);
+      carrierauthenticateOTP.authenticateOTP(req).then((userAuth) => {
+        console.log(userAuth);
+        res.send(userAuth);
+      });
    }
    catch(e) {
      res.status(200).send({success: false, message : "Internal Server Error.."});
@@ -17,8 +18,9 @@ router.post('/submitOTP',(req, res)=>{
 
 router.post('/submitRequest',(req, res)=>{
     try {
-        await userdata = carrierSubmitPortRequest.submitPortRequest(req);
-        res.status(200).send({success : true , userdata});
+        carrierSubmitPortRequest.submitPortRequest(req).then((userData) => {
+          res.status(200).send({success : true , userData});
+        });
     } catch (e) {
       res.status(200).send({success: false, message : "Internal Server Error.."});
     }
@@ -26,8 +28,9 @@ router.post('/submitRequest',(req, res)=>{
 
 router.post('/carrierOnboard' ,(req,res) => {
   try {
-      await onboard = carrierGetCarrierOnboard.getCarrierOnboard(req);
-      res.status(200).send({success : true, onboard});
+      carrierGetCarrierOnboard.getCarrierOnboard(req).then((onboard) => {
+        res.status(200).send({success : true, onboard});
+      });
   } catch (e) {
     res.status(200).send({success : false, message : "Internal server Error.."});
   }

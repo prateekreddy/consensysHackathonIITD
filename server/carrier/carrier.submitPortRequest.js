@@ -1,5 +1,5 @@
 const PortRequest = require('../models/portRequest');
-const web3 = require('carrierController');
+const web3 = require('./carrierController');
 
 const submitPortRequest = async function(req)
 {

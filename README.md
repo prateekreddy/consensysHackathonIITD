@@ -1,5 +1,3 @@
-# LocFin
-A location finder app, uses Google Map APIs.
+# Mobile Number Portability
 
-## Usage
-Search a location and save it for future with a label.
+Start the server using `npm start`
