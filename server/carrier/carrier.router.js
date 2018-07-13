@@ -3,6 +3,7 @@ const router = express.Router();
 const carrierauthenticateOTP = require('./carrier.authenticateOTP');
 const carrierSubmitPortRequest = require('./carrier.submitPortRequest');
 const carrierGetCarrierOnboard = require('./carrier.getCarrierOnboard');
+const carrierAuthenticate = require('./carrier.carrierAuthenticate');
 
 router.post('/submitOTP', (req, res)=>{
    try{
@@ -15,6 +16,17 @@ router.post('/submitOTP', (req, res)=>{
      res.status(200).send({success: false, message : "Internal Server Error.."});
    }
 });
+
+router.post('/authenticateCarrier', (req,res)=>{
+  try {
+      carrierAuthenticate.checkCarrierAuth(req).then((carrierAuth)=>{
+        console.log(carrierAuth);
+        res.send(carrierAuth);
+      });
+  } catch (e) {
+    res.send({success:true});
+  } 
+})
 
 router.post('/submitRequest',(req, res)=>{
     try {
