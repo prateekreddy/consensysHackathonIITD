@@ -10,12 +10,8 @@ import EnsureLoggedInContainer from './containers/EnsureLoggedInContainer.jsx';
 import PublicContainer from './containers/PublicContainer.jsx';
 import UserDashboard from './containers/UserDashboard.jsx';
 import UserNotifications from './containers/UserNotifications.jsx';
-class App extends React.Component {
-  constructor(props){
-    super(props);
-  }
-  render() {
-    return (
+
+  ReactDOM.render(( 
       <MuiThemeProvider >
         <BrowserRouter>
           <Switch>
@@ -24,7 +20,4 @@ class App extends React.Component {
           </Switch>
         </BrowserRouter>
       </MuiThemeProvider>
-      );
-   }
-}
-export default App;
+      ), document.getElementById('app'));
