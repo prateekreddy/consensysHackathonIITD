@@ -12,24 +12,29 @@ class EnsureLoggedInContainer extends React.Component {
   }
   componentDidMount(){
     const that = this;
-    const token = localStorage.getItem('locfin') || '';
-
-    axios({
-      method : 'post',
-      url : '/auth/authenticate',
-      headers : {authorization : 'JWT '+token}
-    })
-    .then(function(response){
-      if(!response.data.success){
-        that.setState({success : false});
-      }else{
-        that.setState({success : true});
-      }
-      that.setState({done : true});
-    })
-    .catch(function(err){
-
-    });
+    const token = localStorage.getItem('num_port') || '';
+    if(token.length == 16){
+      that.setState({success : true});
+    }else{
+      that.setState({success : false});
+    }
+    that.setState({done : true});
+    // axios({
+    //   method : 'post',
+    //   url : '/auth/authenticate',
+    //   headers : {authorization : 'JWT '+token}
+    // })
+    // .then(function(response){
+    //   if(!response.data.success){
+    //     that.setState({success : false});
+    //   }else{
+    //     that.setState({success : true});
+    //   }
+    //   that.setState({done : true});
+    // })
+    // .catch(function(err){
+    //
+    // });
   }
   render(){
     if(this.state.success && this.state.done){
