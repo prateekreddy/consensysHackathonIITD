@@ -1,5 +1,5 @@
 
-const authenticateOTP = async function(req, callback)
+const authenticateOTP = function(req, callback)
 {
   try {
     setTimeout(function () {
