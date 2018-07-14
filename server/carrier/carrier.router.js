@@ -7,9 +7,14 @@ const carrierAuthenticate = require('./carrier.carrierAuthenticate');
 
 router.post('/submitOTP', (req, res)=>{
    try{
-      carrierauthenticateOTP.authenticateOTP(req).then((userAuth) => {
-        console.log(userAuth);
-        res.send(userAuth);
+     console.log("inside submit OTP");
+      carrierauthenticateOTP.authenticateOTP(req ,(err, data) => {
+        console.log(data);
+        if(err)
+        {
+          res.status(200).send({success: false, message : "Internal Server Error.."});
+        }
+        res.status(200).send({success : true, data});
       });
    }
    catch(e) {
@@ -19,20 +24,20 @@ router.post('/submitOTP', (req, res)=>{
 
 router.post('/authenticateCarrier', (req,res)=>{
   try {
-      carrierAuthenticate.checkCarrierAuth(req).then((carrierAuth)=>{
-        console.log(carrierAuth);
-        res.send(carrierAuth);
+      carrierAuthenticate.checkCarrierAuth(req,(err, data)=>{
+        if(err)
+        {
+          res.status(200).send({success: false, message : "Internal Server Error.."});
+        }
+        else {
+          res.status(200).send({success : true, data});
+        }
       });
   } catch (e) {
-    res.send({success:true});
-  } 
+    res.status(200).send({success: false, message : "Internal Server Error.."});
+  }
 })
 
-// body contains
-// * mobile
-// * fromCarrierAddress
-// * toCarrierAddress
-// * toCountry
 router.post('/submitRequest',(req, res)=>{
     try {
         carrierSubmitPortRequest.submitPortRequest(req).then((userData) => {
@@ -43,8 +48,6 @@ router.post('/submitRequest',(req, res)=>{
     }
 });
 
-// * carrierId
-// * carrierName
 router.post('/carrierOnboard' ,(req,res) => {
   try {
       carrierGetCarrierOnboard.getCarrierOnboard(req, (err, onboard) => {

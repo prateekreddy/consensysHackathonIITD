@@ -19,10 +19,9 @@ const getCarrierAddress = async (carrierId) => {
   return carrierAddress;
 };
 
-const submitPortRequest = async function(req)
+const submitPortRequest = function(req, callback)
 {
     try {
-      const promise = new Promise((resolve, reject) => {
         console.log("Blockchain call with account :>> ", web3.eth.accounts[0]);
         web3.personal.unlockAccount(web3.eth.accounts[0], "", 0);
         // let addressCARRIER = variables.carrier1.CARRIERAddress;
@@ -38,27 +37,22 @@ const submitPortRequest = async function(req)
         }, function(error, res) {
           if(error)
           {
-            reject({message : 'Some error while salving the data to the blockchain'});
+            callback(null,{message : 'Some error while salving the data to the blockchain'});
           }
           else {
             const newPortRequest = new PortRequest(req);
             newPortRequest.save((err, data)=>{
               if(err)
               {
-                reject({message : 'Some error while salving the data'});
+                callback(null,{message : 'Some error while salving the data'});
               }
-              resolve(date);
+              callback(data);
             })
           }
         });
-      });
-      return promise;
     } catch (e) {
       console.log(e);
-      const promise = new Promise(function(resolve, reject) {
-        reject(e);
-      });
-      return promise;
+      callback(e,null);
     }
 }
 
