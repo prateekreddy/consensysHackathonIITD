@@ -6,30 +6,35 @@ const carrierGetCarrierOnboard = require('./carrier.getCarrierOnboard');
 const carrierAuthenticate = require('./carrier.carrierAuthenticate');
 
 router.post('/submitOTP', (req, res)=>{
-   // try{
+   try{
      console.log("inside submit OTP");
       carrierauthenticateOTP.authenticateOTP(req ,(err, data) => {
-        //console.log(userAuth);
+        console.log(data);
         if(err)
         {
           res.status(200).send({success: false, message : "Internal Server Error.."});
         }
         res.status(200).send({success : true, data});
       });
-   // }
-   // catch(e) {
-   //   res.status(200).send({success: false, message : "Internal Server Error.."});
-   // }
+   }
+   catch(e) {
+     res.status(200).send({success: false, message : "Internal Server Error.."});
+   }
 });
 
 router.post('/authenticateCarrier', (req,res)=>{
   try {
-      carrierAuthenticate.checkCarrierAuth(req).then((carrierAuth)=>{
-        console.log(carrierAuth);
-        res.send(carrierAuth);
+      carrierAuthenticate.checkCarrierAuth(req,(err, data)=>{
+        if(err)
+        {
+          res.status(200).send({success: false, message : "Internal Server Error.."});
+        }
+        else {
+          res.status(200).send({success : true, data});
+        }
       });
   } catch (e) {
-    res.send({success:true});
+    res.status(200).send({success: false, message : "Internal Server Error.."});
   }
 })
 

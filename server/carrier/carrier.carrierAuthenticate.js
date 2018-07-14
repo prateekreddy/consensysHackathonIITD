@@ -5,7 +5,7 @@ const checkCarrierAuth =  function(req, callback)
     setTimeout(function () {
       if(!req)
       {
-        callback(null, {message : "Invalid OTP. Please try again"})
+        callback(null, {message : "Invalid user name and password. Please try again"})
       }
       else {
         callback(null, {message : "success"})

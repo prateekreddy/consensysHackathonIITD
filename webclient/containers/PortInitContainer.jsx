@@ -84,7 +84,18 @@ class PortInitContainer extends React.Component {
     // });
   }
   resendOTP(){
-
+    axios({
+      method : 'post',
+      url : '/carrier/submitOTP'
+    //  headers : {authorization : 'JWT '+token}
+    },(err, response)=>{
+      if(!response.data){
+        that.setState({success : false});
+      }else{
+        that.setState({success : true});
+      }
+      that.setState({done : true});
+    });
   }
 
   changeMobileNumberText(e){
