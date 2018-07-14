@@ -3,7 +3,6 @@ const router = express.Router();
 const carrierauthenticateOTP = require('./carrier.authenticateOTP');
 const carrierSubmitPortRequest = require('./carrier.submitPortRequest');
 const carrierGetCarrierOnboard = require('./carrier.getCarrierOnboard');
-const carrierAuthenticate = require('./carrier.carrierAuthenticate');
 
 router.post('/submitOTP', (req, res)=>{
    try{
@@ -17,22 +16,6 @@ router.post('/submitOTP', (req, res)=>{
    }
 });
 
-router.post('/authenticateCarrier', (req,res)=>{
-  try {
-      carrierAuthenticate.checkCarrierAuth(req).then((carrierAuth)=>{
-        console.log(carrierAuth);
-        res.send(carrierAuth);
-      });
-  } catch (e) {
-    res.send({success:true});
-  } 
-})
-
-// body contains
-// * mobile
-// * fromCarrierAddress
-// * toCarrierAddress
-// * toCountry
 router.post('/submitRequest',(req, res)=>{
     try {
         carrierSubmitPortRequest.submitPortRequest(req).then((userData) => {
@@ -43,8 +26,6 @@ router.post('/submitRequest',(req, res)=>{
     }
 });
 
-// * carrierId
-// * carrierName
 router.post('/carrierOnboard' ,(req,res) => {
   try {
       carrierGetCarrierOnboard.getCarrierOnboard(req).then((onboard) => {
@@ -55,4 +36,4 @@ router.post('/carrierOnboard' ,(req,res) => {
   }
 });
 
-module.exports = router;
+module.export = router;
