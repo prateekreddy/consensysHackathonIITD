@@ -1,11 +1,11 @@
 
-const authenticateOTP = function(req, callback)
+const checkCarrierAuth =  function(req, callback)
 {
   try {
     setTimeout(function () {
-      if(isNaN(req.body.otp))
+      if(!req)
       {
-        callback(null, {message : "Invalid OTP. Please try again"})
+        callback(null, {message : "Invalid user name and password. Please try again"})
       }
       else {
         callback(null, {message : "success"})
@@ -13,11 +13,10 @@ const authenticateOTP = function(req, callback)
     console.log('timeout completed');
 }, 1000);
   } catch (e) {
-    console.log(e);
     callback(e,null);
   }
 }
 
 module.exports = {
-  authenticateOTP : authenticateOTP
+  checkCarrierAuth : checkCarrierAuth
 }

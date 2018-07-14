@@ -14,7 +14,7 @@ const configDB = require('../config/config.js').mongoConfig;
 const carrier = require('./carrier');
 
 app.set('superSecret', configJwt.secret);
-// mongoose.Promise = global.Promise;
+mongoose.Promise = global.Promise;
 mongoose.connect(configDB.connectionURL);
 
 app.use(morgan('dev'));
@@ -46,21 +46,20 @@ app.get('/', function(req, res) {
     res.sendFile(path.resolve(__dirname, '../', 'webclient', 'assets', 'index.html', 'client'));
 });
 
-app.use('/carrier', carrier);
 // app.use('/auth', auth);
-// app.use(function(req,res,next){
-//   try {
-//     if(req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT'){
-//       const user = jwtDecode(req.headers.authorization.split(' ')[1]);
-//       req.user = user;
-//       next();
-//     }else{
-//       return res.status(401).send({message : "Authentication failed"});
-//     }
-//   } catch (e) {
-//     return res.status(500).send({message : "Internal Server Error.."});
-//   }
-// });
+app.use(function(req,res,next){
+  try {
+    if(req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT'){
+      const user = jwtDecode(req.headers.authorization.split(' ')[1]);
+      req.user = user;
+      next();
+    }else{
+      return res.status(401).send({message : "Authentication failed"});
+    }
+  } catch (e) {
+    return res.status(500).send({message : "Internal Server Error.."});
+  }
+});
 
 app.use(function(req, res) {
     let err = new Error('Resource not found');

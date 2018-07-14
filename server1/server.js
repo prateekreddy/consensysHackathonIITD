@@ -5,7 +5,6 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const configJwt = require('../config/config.js');
-const jwtDecode = require('jwt-decode');
 const app = express();
 const mongoose = require('mongoose');
 const configDB = require('../config/config.js').mongoConfig;
@@ -13,8 +12,7 @@ const configDB = require('../config/config.js').mongoConfig;
 // const auth = require('./authentication');
 const carrier = require('./carrier');
 
-app.set('superSecret', configJwt.secret);
-// mongoose.Promise = global.Promise;
+mongoose.Promise = global.Promise;
 mongoose.connect(configDB.connectionURL);
 
 app.use(morgan('dev'));
@@ -22,23 +20,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 const compression = require('compression');
 app.use(compression());
-
-const webpack = require('webpack');
-const webpackDevMiddleware = require('webpack-dev-middleware');
-const webpackHotMiddleware = require('webpack-hot-middleware');
-const webpackConfig = require('../webpack.config.js');
-const webpackCompiler = webpack(webpackConfig);
-
-app.use(webpackDevMiddleware(webpackCompiler, {
-    noInfo: true,
-    publicPath: webpackConfig.output.publicPath
-}));
-
-// setting up webpack hot middlewares
-app.use(webpackHotMiddleware(webpackCompiler, {
-    path: '/__webpack_hmr',
-    heartbeat: 10 * 1000
-}));
 
 app.use(express.static(path.resolve(__dirname, '../', 'webclient')));
 
@@ -74,11 +55,11 @@ app.use(function(err, req, res) {
 });
 
 //  route middleware
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated() === true)
-        return next();
-    res.status(201).send('');
-    return 1;
-}
+// function isLoggedIn(req, res, next) {
+//     if (req.isAuthenticated() === true)
+//         return next();
+//     res.status(201).send('');
+//     return 1;
+// }
 
 module.exports = app;

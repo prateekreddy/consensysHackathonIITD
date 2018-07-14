@@ -40,17 +40,20 @@ const getCarrierOnboard = function(req, callback) {
 			{
 				console.log("blockchain error", error);
 				callback(null, {message : 'Some error while salving the data to the blockchain'});
+				return;
 			}
 			else {
-			const newCarrierOnboard = new CarrierOnboard(req);
-			newCarrierOnboard.save((err, data)=>{
-				if(err)
-				{
-					console.log("db error")
-				callback({message : 'Some error while salving the data'}, null);
-				}
-				callback(null, data);
-			})
+			// const newCarrierOnboard = new CarrierOnboard(req);
+			// newCarrierOnboard.save((err, data)=>{
+			// 	if(err)
+			// 	{
+			// 		console.log("db error")
+			// 	callback({message : 'Some error while salving the data'}, null);
+			// 	return;
+			// 	}
+			// 	callback(null, data);return;
+			// })
+			callback(null, true)
 			}
 		});
   } catch (e) {

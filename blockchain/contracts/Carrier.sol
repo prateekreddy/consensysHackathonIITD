@@ -4,10 +4,10 @@ import "./Port.sol";
 
 contract Carrier {
 
-    string public carrierId;
+    bytes32 public carrierId;
     string public carrierName;
-    mapping(bytes32 => bytes32[]) public circlesByCountry;
-    mapping(bytes32 => mapping(bytes32 => bool)) public isCircleExists;
+    mapping(bytes32 => bytes32[]) circlesByCountry;
+    mapping(bytes32 => mapping(bytes32 => bool)) isCircleExists;
     bytes32[] public countries;
 
     address public admin;
@@ -24,13 +24,21 @@ contract Carrier {
 
     event PortRequestCreated(address indexed _fromCarrier, address indexed _toCarrier, bytes32 indexed _hashedMobileNo, address _portAddress);
 
-    constructor(string _carrierId, string _carrierName) public {
+    constructor(bytes32 _carrierId, string _carrierName) public {
         carrierId = _carrierId;
         carrierName = _carrierName;
     }
 
-    function createPortRequest(address _fromCarrier, address _toCarrier, bytes32 _hashedMobileNo) public {
-        address port = new Port(_fromCarrier, _toCarrier, _hashedMobileNo);
+    function getCirclesByCountry(bytes32 _country) public view returns(bytes32[] circles) {
+        return circlesByCountry[_country];
+    }
+
+    function circleExists(bytes32 _country, bytes32 _circle) public view returns(bool circlePresent) {
+        return isCircleExists[_country][_circle];
+    }
+
+    function createPortRequest(address _fromCarrier, address _toCarrier, bytes32 _toCountry, bytes32 _toCircle, bytes32 _hashedMobileNo) public {
+        address port = new Port(_fromCarrier, _toCarrier, _toCountry, _toCircle, _hashedMobileNo);
         emit PortRequestCreated(_fromCarrier, _toCarrier, _hashedMobileNo, port);
     }
 
