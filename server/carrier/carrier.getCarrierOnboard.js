@@ -12,7 +12,7 @@ async function getOnBoarder() {
 const onBoarder = getOnBoarder();
 
 const getCarrierOnboard = function(req) {
-	console.log(req.body)
+	console.log("req body >>>> ",req.body)
   try {
     const promise = new Promise((resolve, reject)=>{
 			console.log("Blockchain call with account :>> ", web3.eth.accounts[0]);
