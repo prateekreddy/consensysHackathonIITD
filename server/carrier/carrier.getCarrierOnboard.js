@@ -1,6 +1,6 @@
 const rlp = require('rlp');
 const CarrierOnboard = require('../models/carrierOnboard');
-const web3 = require('./carrierController');
+const web3 = require('./carrierController').web3;
 const onBoardConfig = require('../contracts/OnBoardCarrier');
 
 async function getOnBoarder() {
@@ -11,39 +11,34 @@ async function getOnBoarder() {
 
 const onBoarder = getOnBoarder();
 
-const getCarrierOnboard = function(req) {
+const getCarrierOnboard = function(req, callback) {
 	console.log(req.body)
   try {
-    const promise = new Promise((resolve, reject)=>{
-			console.log("Blockchain call with account :>> ", web3.eth.accounts[0]);
-			web3.personal.unlockAccount(web3.eth.accounts[0], "", 0);
-			onBoarder.methods.addCarrier(rlp.encode(req.body.carrierId), req.body.carrierName).send({
-				from: web3.eth.accounts[0],
-				gas: 9987650
-			}, function(error, res) {
-				if(error)
+		console.log("Blockchain call with account :>> ", web3.eth.accounts[0]);
+		onBoarder.methods.addCarrier(rlp.encode(req.body.carrierId), req.body.carrierName).send({
+			from: web3.eth.accounts[0],
+			gas: 9987650
+		}, function(error, res) {
+			if(error)
+			{
+				console.log("blockchain error")
+				callback(null, {message : 'Some error while salving the data to the blockchain'});
+			}
+			else {
+			const newCarrierOnboard = new CarrierOnboard(req);
+			newCarrierOnboard.save((err, data)=>{
+				if(err)
 				{
-				reject({message : 'Some error while salving the data to the blockchain'});
+					console.log("db error")
+				callback({message : 'Some error while salving the data'}, null);
 				}
-				else {
-				const newCarrierOnboard = new CarrierOnboard(req);
-				newCarrierOnboard.save((err, data)=>{
-					if(err)
-					{
-					reject({message : 'Some error while salving the data'});
-					}
-					resolve(date);
-				})
-				}
-			});
-    });
-    return promise;
+				callback(null, data);
+			})
+			}
+		});
   } catch (e) {
 		console.log(e);
-		const promise = new Promise(function(resolve, reject) {
-			reject(e);
-		});
-		return promise;
+		callback(e, null);
 	}
 }
 

@@ -1,6 +1,6 @@
 const rlp = require('rlp');
 const PortRequest = require('../models/portRequest');
-const web3 = require('./carrierController');
+const web3 = require('./carrierController').web3;
 const onBoardConfig = require('../contracts/OnBoardCarrier');
 const carrierConfig = require('../contracts/Carrier');
 

@@ -14,7 +14,6 @@ console.log("EthIP :", EthIP);
 console.log("EthRPCPort :", EthRPCPort);
 try {
     var web3 = new Web3(new Web3.providers.HttpProvider("http://" + EthIP + ":" + EthRPCPort));
-
 } catch (e) {
     console.log(e);
 }
