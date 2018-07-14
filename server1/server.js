@@ -21,12 +21,6 @@ app.use(bodyParser.urlencoded({extended: false}));
 const compression = require('compression');
 app.use(compression());
 
-app.use(express.static(path.resolve(__dirname, '../', 'webclient')));
-
-app.get('/', function(req, res) {
-    res.sendFile(path.resolve(__dirname, '../', 'webclient', 'assets', 'index.html', 'client'));
-});
-
 app.use('/carrier', carrier);
 // app.use('/auth', auth);
 // app.use(function(req,res,next){
