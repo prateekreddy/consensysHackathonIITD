@@ -83,11 +83,12 @@ class UserDashboard extends React.Component {
     });
   }
   handleSubmitPortDetails(){
+    console.log(this.state);
     axios.post('/submitRequest', {
-      mobile,
-      fromCarrierAddress,
-      toCarrierAddress,
-      toCountry
+      mobile: this.state.,
+      fromCarrierId: this.state.currentCarrier,
+      toCarrierId: this.state.,
+      toCountry: this.state.newSelectedCountry
     })
   }
   getList(items, valueName, textName){

@@ -5,6 +5,7 @@ const carrierSubmitPortRequest = require('./carrier.submitPortRequest');
 const carrierGetCarrierOnboard = require('./carrier.getCarrierOnboard');
 const carrierAuthenticate = require('./carrier.carrierAuthenticate');
 const listing = require('./carrier.listing');
+const filter = require('./carrier.filter');
 
 router.post('/submitOTP', (req, res)=>{
    try{
@@ -34,7 +35,7 @@ router.post('/authenticateCarrier', (req,res)=>{
 // * fromCarrierAddress
 // * toCarrierAddress
 // * toCountry
-router.post('/submitRequest',(req, res)=>{
+router.post('/submitPortRequest',(req, res)=>{
     try {
         carrierSubmitPortRequest.submitPortRequest(req).then((userData) => {
           res.send({success : true , userData});
@@ -87,6 +88,27 @@ router.get('/getCarriers', (req, res) => {
   } catch (e) {
     res.send({success : false, message : "Internal server Error.."});
   }
+});
+
+router.get('/filterByNumber', (req, res) => {
+  // mobileNumber, carrier and country and by status
+  filter.byNumber(req, (err, result) => {
+    if(!err) {
+      res.send({success : true, ports: result});
+    } else {
+      res.send({success : false, message : "Internal server Error.."});
+    }
+  });
+});
+
+router.get('/filterByCarrier', (req, res) => {
+  filter.byCarrier(req, (err, result) => {
+    if(!err) {
+      res.send({success : true, ports: result});
+    } else {
+      res.send({success : false, message : "Internal server Error.."});
+    }
+  })
 });
 
 module.exports = router;
