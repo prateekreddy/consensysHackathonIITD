@@ -59,7 +59,29 @@ class PortInitContainer extends React.Component {
     $("#number-verify").hide("slide", {direction: 'right'}, that.constant.easingType, function(){$("#number-reg").show("slide",{direction: 'left'}, that.constant.easingType)});
   }
   verifyOTP(){
-
+    axios({
+      method : 'post',
+      url : '/carrier/submitOTP'
+    //  headers : {authorization : 'JWT '+token}
+    },(err, response)=>{
+      if(!response.data){
+        that.setState({success : false});
+      }else{
+        that.setState({success : true});
+      }
+      that.setState({done : true});
+    });
+    // .then(function(response){
+    //   if(!response.data.success){
+    //     that.setState({success : false});
+    //   }else{
+    //     that.setState({success : true});
+    //   }
+    //   that.setState({done : true});
+    // })
+    // .catch(function(err){
+    //
+    // });
   }
   resendOTP(){
 

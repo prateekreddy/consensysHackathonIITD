@@ -3,7 +3,7 @@ const authenticateOTP = function(req, callback)
 {
   try {
     setTimeout(function () {
-      if(isNaN(req.otp))
+      if(isNaN(req.body.otp))
       {
         callback(null, {message : "Invalid OTP. Please try again"})
       }
