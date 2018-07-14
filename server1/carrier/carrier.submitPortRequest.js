@@ -3,18 +3,31 @@ const PortRequest = require('../models/portRequest');
 const web3 = require('./carrierController').web3;
 const onBoardConfig = require('../contracts/OnBoardCarrier');
 const carrierConfig = require('../contracts/Carrier');
-
-async function getOnBoarder() {
-  const networkId = await web3.eth.net.getId();
-  const onBoarder = new web3.eth.Contract(onBoardConfig.abi, onBoardConfig.networks[networkId].address);
-  return onBoarder;
+function getOnBoarder(callback) {
+  const networkId = web3.eth.net.getId().then((networkId) => {
+		console.log(networkId);
+		const onBoarder = new web3.eth.Contract(onBoardConfig.abi, onBoardConfig.networks[networkId].address);
+		console.log(onBoarder, onBoarder.methods)
+		callback(onBoarder);
+	});
 }
 
-const onBoarder = getOnBoarder();
+async function getAccounts() {
+	let acc = await web3.eth.getAccounts();
+	return acc;
+}
+
+let onBoarder, accounts;
+getOnBoarder((_onBoarder) => {
+	onBoarder = _onBoarder;
+});
+getAccounts().then((_accounts) => {
+	accounts = _accounts;
+});
 
 const getCarrierAddress = async (carrierId) => {
-  const encodedId = rlp.encode(carrierId);
-  const carrierAddress = await onBoarder.methods.carrierIdMap(carrierId).call(encodedId);
+  const encodedId = "0x"+rlp.encode(carrierId).toString('hex');
+  const carrierAddress = await onBoarder.methods.carrierIdMap(encodedId).call();
   console.log(carrierAddress);
   return carrierAddress;
 };
@@ -22,33 +35,29 @@ const getCarrierAddress = async (carrierId) => {
 const submitPortRequest = async function(req)
 {
     try {
-      const promise = new Promise((resolve, reject) => {
-        console.log("Blockchain call with account :>> ", web3.eth.accounts[0]);
-        web3.personal.unlockAccount(web3.eth.accounts[0], "", 0);
+      const promise = new Promise(async (resolve, reject) => {
+        // console.log("Blockchain call with account :>> ", web3.eth.accounts[0]);
+        // web3.personal.unlockAccount(web3.eth.accounts[0], "", 0);
         // let addressCARRIER = variables.carrier1.CARRIERAddress;
         // let Contract = web3.eth.contract(JSON.parse(variables.carrier1.CARRIERAddress));
         // let contract = Contract.at(addressCARRIER);
-        let mobileHash = web3.utils.toHex(req.body.mobile);
-        const fromCarrierAddress = getCarrierAddress(req.body.fromCarrierAddress);
-        const toCarrierAddress = getCarrierAddress(req.body.toCarrierAddress);
+        console.log(req.body);
+        let mobileHash = req.body.mobile;
+        const fromCarrierAddress = await getCarrierAddress(req.body.fromCarrierId);
+        const toCarrierAddress = await getCarrierAddress(req.body.toCarrierId);
         const toCarrierContract = new web3.eth.Contract(carrierConfig.abi, toCarrierAddress);
-        toCarrierContract.creatPortRequest.sendTransaction(fromCarrierAddress, toCarrierAddress, rlp.encode(req.body.toCountry), rlp.encode(''), mobileHash,{
-          from: web3.eth.accounts[0],
+        console.log(fromCarrierAddress, toCarrierAddress, "0x"+rlp.encode(req.body.toCountry).toString('hex'), "0x"+rlp.encode('').toString('hex'), mobileHash)
+        toCarrierContract.methods.createPortRequest(fromCarrierAddress, toCarrierAddress, "0x"+rlp.encode(req.body.toCountry).toString('hex'), "0x"+rlp.encode('').toString('hex'), mobileHash).send({
+          from: accounts[0],
           gas: 9987650
         }, function(error, res) {
+          console.log(error, res);
           if(error)
           {
             reject({message : 'Some error while salving the data to the blockchain'});
           }
           else {
-            const newPortRequest = new PortRequest(req);
-            newPortRequest.save((err, data)=>{
-              if(err)
-              {
-                reject({message : 'Some error while salving the data'});
-              }
-              resolve(date);
-            })
+            resolve(true);
           }
         });
       });

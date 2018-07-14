@@ -22,7 +22,7 @@ contract Carrier {
         _;
     }
 
-    event PortRequestCreated(address indexed _fromCarrier, address indexed _toCarrier, bytes32 indexed _hashedMobileNo, address _portAddress);
+    event PortRequestCreated(address indexed _fromCarrier, address indexed _toCarrier, uint indexed _hashedMobileNo, address _portAddress);
 
     constructor(bytes32 _carrierId, string _carrierName) public {
         carrierId = _carrierId;
@@ -33,11 +33,15 @@ contract Carrier {
         return circlesByCountry[_country];
     }
 
+    function getCountries() public view returns(bytes32[] _countries) {
+        return countries;
+    }
+
     function circleExists(bytes32 _country, bytes32 _circle) public view returns(bool circlePresent) {
         return isCircleExists[_country][_circle];
     }
 
-    function createPortRequest(address _fromCarrier, address _toCarrier, bytes32 _toCountry, bytes32 _toCircle, bytes32 _hashedMobileNo) public {
+    function createPortRequest(address _fromCarrier, address _toCarrier, bytes32 _toCountry, bytes32 _toCircle, uint _hashedMobileNo) public {
         address port = new Port(_fromCarrier, _toCarrier, _toCountry, _toCircle, _hashedMobileNo);
         emit PortRequestCreated(_fromCarrier, _toCarrier, _hashedMobileNo, port);
     }

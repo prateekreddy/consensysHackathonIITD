@@ -7,7 +7,7 @@ function getOnBoarder(callback) {
   const networkId = web3.eth.net.getId().then((networkId) => {
 		console.log(networkId);
 		const onBoarder = new web3.eth.Contract(onBoardConfig.abi, onBoardConfig.networks[networkId].address);
-		console.log(onBoarder, onBoarder.methods)
+		// console.log(onBoarder, onBoarder.methods)
 		callback(onBoarder);
 	});
 }
