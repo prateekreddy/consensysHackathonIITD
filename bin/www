@@ -5,7 +5,7 @@
  */
 
 //Create instance of express based web app
-var app = require('../server/webapp.service');
+var app = require('../server1/server');
 var debug = require('debug')('dataDisplayApp:server');
 var http = require('http');
 

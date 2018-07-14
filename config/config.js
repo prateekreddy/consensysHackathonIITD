@@ -21,7 +21,7 @@ let googleLocation = {
 }
 
 let blockchainConfig = {
-  host_rpc_ip: '10.184.194.186',
+  host_rpc_ip: 'localhost',
   host_rpc_port: '8545'
 }
 
