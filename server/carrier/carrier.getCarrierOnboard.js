@@ -1,34 +1,41 @@
+const rlp = require('rlp');
 const CarrierOnboard = require('../models/carrierOnboard');
 const web3 = require('./carrierController');
+const onBoardConfig = require('../contracts/OnBoardCarrier');
 
-const getCarrierOnboard = async function(req) {
+async function getOnBoarder() {
+  const networkId = await web3.eth.net.getId();
+  const onBoarder = new web3.eth.Contract(onBoardConfig.abi, onBoardConfig.networks[networkId].address);
+  return onBoarder;
+}
+
+const onBoarder = getOnBoarder();
+
+const getCarrierOnboard = function(req) {
+	console.log(req.body)
   try {
     const promise = new Promise((resolve, reject)=>{
-		console.log("Blockchain call with account :>> ", web3.eth.accounts[0]);
-		web3.personal.unlockAccount(web3.eth.accounts[0], "", 0);
-		let addressCARRIER = variables.carrier1.CARRIERAddress;
-		let Contract = web3.eth.contract(JSON.parse(variables.carrier1.CARRIERAddress));
-		let contract = Contract.at(addressCARRIER);
-		let mobileHash = web3.utils.toHex(req.body.mobile);
-		contract.getCarrierOnBoard.sendTransaction(req.body.carrierAddress, req.body.mobileHash,{
-			from: web3.eth.accounts[0],
-			gas: 9987650
-		}, function(error, res) {
-			if(error)
-			{
-			reject({message : 'Some error while salving the data to the blockchain'});
-			}
-			else {
-			const newCarrierOnboard = new CarrierOnboard(req);
-			newCarrierOnboard.save((err, data)=>{
-				if(err)
+			console.log("Blockchain call with account :>> ", web3.eth.accounts[0]);
+			web3.personal.unlockAccount(web3.eth.accounts[0], "", 0);
+			onBoarder.methods.addCarrier(rlp.encode(req.body.carrierId), req.body.carrierName).send({
+				from: web3.eth.accounts[0],
+				gas: 9987650
+			}, function(error, res) {
+				if(error)
 				{
-				reject({message : 'Some error while salving the data'});
+				reject({message : 'Some error while salving the data to the blockchain'});
 				}
-				resolve(date);
-			})
-			}
-		});
+				else {
+				const newCarrierOnboard = new CarrierOnboard(req);
+				newCarrierOnboard.save((err, data)=>{
+					if(err)
+					{
+					reject({message : 'Some error while salving the data'});
+					}
+					resolve(date);
+				})
+				}
+			});
     });
     return promise;
   } catch (e) {

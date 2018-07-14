@@ -16,6 +16,11 @@ router.post('/submitOTP', (req, res)=>{
    }
 });
 
+// body contains
+// * mobile
+// * fromCarrierAddress
+// * toCarrierAddress
+// * toCountry
 router.post('/submitRequest',(req, res)=>{
     try {
         carrierSubmitPortRequest.submitPortRequest(req).then((userData) => {
@@ -26,6 +31,8 @@ router.post('/submitRequest',(req, res)=>{
     }
 });
 
+// * carrierId
+// * carrierName
 router.post('/carrierOnboard' ,(req,res) => {
   try {
       carrierGetCarrierOnboard.getCarrierOnboard(req).then((onboard) => {
@@ -36,4 +43,4 @@ router.post('/carrierOnboard' ,(req,res) => {
   }
 });
 
-module.export = router;
+module.exports = router;

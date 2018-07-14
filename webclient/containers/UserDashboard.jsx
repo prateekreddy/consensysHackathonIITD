@@ -12,6 +12,7 @@ import SectionHeader from '../components/SectionHeader.jsx';
 
 import { Connect, SimpleSigner} from 'uport-connect';
 import ActionTheaters from 'material-ui/svg-icons/navigation/arrow-forward';
+import axios from 'axios';
 
 const uport = new Connect('Mobile Number Porting', {
   clientId: '2p29ciAQ1zDPLsATkFVv9XzB3pRJSPRUYH6',
@@ -70,16 +71,24 @@ class UserDashboard extends React.Component {
     uport.requestCredentials({
       requested: ['name', 'passport']
     }).then((credentials) => {
-      credentials.receive()
+      console.log(credentials)
       if(!credentials.passport) {
         that.setState({errMsg: "Please update your uPort profile with passport credentials"});
       } else {
-        that.setState({passport: credentials.passport});
+        that.setState({
+          name: credentials.name,
+          passport: credentials.passport
+        });
       }
     });
   }
   handleSubmitPortDetails(){
-    
+    axios.post('/submitRequest', {
+      mobile,
+      fromCarrierAddress,
+      toCarrierAddress,
+      toCountry
+    })
   }
   getList(items, valueName, textName){
     return items.map((item,id) => {

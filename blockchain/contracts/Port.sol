@@ -3,6 +3,8 @@ pragma solidity 0.4.24;
 contract Port {
     address fromCarrier;
     address toCarrier;
+    bytes32 toCountry;
+    bytes32 toCircle;
     string portStatus;
 
     bytes32 hashedMobileNumber;
@@ -17,7 +19,7 @@ contract Port {
         _;
     }
 
-    constructor(address _fromCarrier, address _toCarrier, bytes32 _hashedMobileNumber) public {
+    constructor(address _fromCarrier, address _toCarrier, bytes32 toCountry, bytes32 toCircle, bytes32 _hashedMobileNumber) public {
         fromCarrier = _fromCarrier;
         toCarrier = _toCarrier;
         hashedMobileNumber = _hashedMobileNumber;
