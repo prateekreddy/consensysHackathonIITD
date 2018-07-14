@@ -32,7 +32,7 @@ router.post('/submitRequest',(req, res)=>{
     try {
         carrierSubmitPortRequest.submitPortRequest(req).then((userData) => {
           res.status(200).send({success : true , userData});
-        });
+        }).catch(console.log);
     } catch (e) {
       res.status(200).send({success: false, message : "Internal Server Error.."});
     }
@@ -40,9 +40,13 @@ router.post('/submitRequest',(req, res)=>{
 
 router.post('/carrierOnboard' ,(req,res) => {
   try {
-      carrierGetCarrierOnboard.getCarrierOnboard(req).then((onboard) => {
-        res.status(200).send({success : true, onboard});
-      });
+      carrierGetCarrierOnboard.getCarrierOnboard(req, (err, onboard) => {
+        if(!err) {
+          res.status(200).send({success : true, onboard});
+        } else {
+          res.status(200).send({success : false, message : "Internal server Error.."});
+        }
+      })
   } catch (e) {
     res.status(200).send({success : false, message : "Internal server Error.."});
   }

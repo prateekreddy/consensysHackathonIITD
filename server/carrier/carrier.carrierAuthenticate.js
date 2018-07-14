@@ -1,26 +1,19 @@
 
-const checkCarrierAuth = async function(req)
+const checkCarrierAuth =  function(req, callback)
 {
   try {
-  const promise = new Promise((resolve, reject) => {
     setTimeout(function () {
       if(!req)
       {
-        reject({message : "Invalid OTP. Please try again"})
+        callback(null, {message : "Invalid OTP. Please try again"})
       }
       else {
-        resolve({message : "success"})
+        callback(null, {message : "success"})
       }
     console.log('timeout completed');
 }, 1000);
-  });
-  return promise;
   } catch (e) {
-    console.log(e);
-    const promise = new Promise(function(resolve, reject) {
-      reject(e);
-    });
-    return promise;
+    callback(e,null);
   }
 }
 
