@@ -21,30 +21,6 @@ app.use(bodyParser.urlencoded({extended: false}));
 const compression = require('compression');
 app.use(compression());
 
-const webpack = require('webpack');
-const webpackDevMiddleware = require('webpack-dev-middleware');
-const webpackHotMiddleware = require('webpack-hot-middleware');
-const webpackConfig = require('../webpack.config.js');
-const webpackCompiler = webpack(webpackConfig);
-
-app.use(webpackDevMiddleware(webpackCompiler, {
-    noInfo: true,
-    publicPath: webpackConfig.output.publicPath
-}));
-
-// setting up webpack hot middlewares
-app.use(webpackHotMiddleware(webpackCompiler, {
-    path: '/__webpack_hmr',
-    heartbeat: 10 * 1000
-}));
-
-
-app.use(express.static(path.resolve(__dirname, '../', 'webclient')));
-
-app.get('/', function(req, res) {
-    res.sendFile(path.resolve(__dirname, '../', 'webclient', 'assets', 'index.html', 'client'));
-});
-
 app.use('/carrier', carrier);
 // app.use('/auth', auth);
 // app.use(function(req,res,next){
