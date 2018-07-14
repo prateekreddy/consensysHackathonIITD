@@ -134,7 +134,6 @@ class UserDashboard extends React.Component {
                   labelPosition="before"
                   backgroundColor = '#1A589E'
                   labelStyle = {{color : 'white'}}
-                  zDepth = {4}
                   onClick = {this.handleKYCDetails.bind(this)}
                 />
                 </td>
@@ -149,7 +148,6 @@ class UserDashboard extends React.Component {
             style = {{marginTop : '30px'}}
             labelStyle = {{color : 'white'}}
             icon = {<NavigationArrowForward color={'#fff'} />}
-            zDepth = {4}
             onClick = {this.handleSubmitPortDetails.bind(this)}
           />
         </Paper>
